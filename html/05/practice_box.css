@@ -1,0 +1,42 @@
+div {
+  border: solid 4px #FFA200;
+  width: 50%;
+  margin: 0px auto;
+  padding: 20px;
+}
+h2 {
+  font-size: 20px;
+  border: solid 1px #FFCC99;
+  margin: 0 auto;
+  background-color: #FFD495;
+  padding: 10px;
+}
+dl {
+  border: solid 1px #FFCD77;
+  display: block;
+  margin: 0px auto 20px;
+  padding: 10px;
+}
+dt {
+  border-bottom: dashed 1px #FFDDA1;
+}
+dd {
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+p{
+  border: solid 1px #FFCC99;
+  display: block;
+  margin: 0px auto 20px;
+  padding: 10px;
+}
+a {
+  font-weight: bold;
+  color: #520CEC;
+  text-align: center;
+  text-decoration: none;
+  border: solid 1px #FFCD77;
+  display: block;
+  background-color: #FFE9B5;
+  padding: 5px;
+}

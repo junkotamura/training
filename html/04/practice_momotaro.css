@@ -1,0 +1,30 @@
+h1 {
+  color: #0000FF;
+  background-color: #00FFFF;
+  font-size: 20px;
+  text-align: center;
+  border-top: dotted 3px #0000FF;
+  border-bottom: dotted 3px #0000FF;
+}
+h2 {
+  color: #0000FF;
+  background-color: #00FFFF;
+  font-size: 20px;
+  text-align: center;
+  border-top: dotted 3px #0000FF;
+  border-bottom: dotted 3px #0000FF;
+}
+p {
+  color: #000000;
+  font-size: 16px;
+}
+ul {
+  list-style-type: square;
+}
+.red {
+  color: #FF0000;
+  font-size: 18px;
+}
+a {
+  color: #ffa500;
+}
