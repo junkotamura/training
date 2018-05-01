@@ -1,0 +1,36 @@
+html, body, main {
+  width: auto;
+}
+header, footer {
+  border-bottom: solid 1px;
+}
+nav, aside, article {
+  border: solid 1px;
+}
+img {
+  width: 300px;
+}
+footer {
+  border-bottom: solid 1px;
+}
+main {
+  display: flex;
+  justify-content: center; 
+}
+.hdht {
+  margin-left: 190px;
+}
+.con {
+  display: flex;
+  width: 960px;
+  justify-content: center;
+}
+nav {
+  flex: auto;
+}
+article {
+   flex: auto;
+}
+aside {
+  flex: initial;
+}

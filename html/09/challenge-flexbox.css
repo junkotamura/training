@@ -1,0 +1,61 @@
+.block-group {
+  margin: 0 auto;
+  width: 500px;
+  border: solid 2px;
+}
+ 
+.blockA {
+  height: 50px;
+  background-color: #ff0000;
+  flex: 1;
+}
+ 
+.blockB {
+  background-color: #00ff00;
+  height: 50px;
+  flex: 1;
+}
+ 
+.blockC {
+  height: 100px;
+  width: 250px;
+  background-color: #0000ff;
+
+}
+ 
+.blockD {
+  height: 50px;
+　width: 250px;
+  background-color: #ffff00;
+}
+ 
+.blockE {
+  height: 50px;
+  width: 250px;
+  background-color: #ff00ff;
+}
+ 
+.blockF {
+  height: 50px;
+  background-color: #ffffff;
+  flex: 1;
+}
+ 
+.blockG {
+  height: 50px;
+  background-color: #00ffff;
+  flex: 5;
+}
+.flex1 {
+  display: flex;
+}
+.flex2 {
+  display: flex;
+}
+.flex3 {
+  display: flex;
+}
+#de {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,13 @@
+.menu {
+}
+p {
+  border: 1px solid gray;
+  padding: 5px;
+  flex: 1;
+}
+.menu {
+  display: flex;
+}
+.stamp {
+  flex: 3;
+}
