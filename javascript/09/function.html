@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <script>
+    // ユーザー定義関数 1
+    function output_hello(){
+      document.write('<p>hello関数: output_hello</p>');
+    }
+    // ユーザー定義関数 2
+    function output_hello_name(name){
+      document.write('<p>hello_name関数: hello ' + name + '</p>');
+    }
+    // ユーザー定義関数 3
+    function make_hello_name(name){
+      var str = '<p>make_hello_name関数: hello ' + name + '</p>';
+      return str;
+    } 
+ 
+    // output_hello関数(ユーザー定義関数 1)の実行
+    output_hello();
+    // output_hello_name関数(ユーザー定義関数 2)の実行
+    output_hello_name('山田');
+    // make_hello_name関数(ユーザー定義関数 3)の実行
+    var hello_name = make_hello_name('鈴木');
+    document.write(hello_name);
+  </script>
+</body>
+</html>
+
