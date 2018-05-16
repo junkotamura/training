@@ -4,22 +4,19 @@
   <meta charset="UTF-8">
 </head>
 <body>
-  <script>
+  <script>
     var data = [59, 39, 100, 2, 15, 40, 84, 97];
-    var ave = 0; // 平均値
- 
-    // 関数calc_aveを利用し配列dataの平均値aveを計算
-    function calc_ave(data) {
+    var ave;
     var sum = 0;
-    for (var i = 0; i < data.length; i++) {
-      sum += data[i];
-      ave = sum / i;
-  
-    // 平均値を書き出し
-    document.write(ave);
-  } 
-   }
-  </script> 
+    function calc_ave(data) {
+      for (var i = 0; i < data.length; i++) {
+        sum += data[i];
+        ave =  (sum / data.length);
+      }
+     return ave;
+    }
+    document.write(calc_ave(data));
+  </script>
 </body>
 </html>
 
