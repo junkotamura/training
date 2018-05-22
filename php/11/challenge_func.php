@@ -41,7 +41,10 @@ if ($request_method === 'POST') {
 */
 function calc_bmi($height, $weight) {
   //以下に処理を記述してください
-  $weight/($height*
+    $height = $height/100;
+    $bmi = $weight/($height*$height);
+    $bmi = round($bmi,1);
+    return $bmi;
 }
  
 /**
