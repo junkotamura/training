@@ -4,10 +4,10 @@ date_default_timezone_set('Asia/Tokyo');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $comment = $_POST['comment']."\n";
     $time = date("n月j日 H:i:s"); 
-    $write =$time. ' ' .$comment. "<br/>"; 
+    $write = $time. ' ' .$comment. "<br/>"; 
     $log = fopen ($filename, "a"); 
     flock ($log, LOCK_EX); 
-    fputs ($log,$write); 
+    fputs ($log, $write); 
     flock ($log, LOCK_UN); 
     fclose ($log);
   }

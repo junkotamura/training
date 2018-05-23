@@ -10,15 +10,12 @@ nav, aside, article {
 img {
   width: 300px;
 }
-footer {
-  border-bottom: solid 1px;
-}
 main {
   display: flex;
   justify-content: center; 
 }
 .hdht {
-  margin-left: 190px;
+  margin-left: 240px;
 }
 .con {
   display: flex;
