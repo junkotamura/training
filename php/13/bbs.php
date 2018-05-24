@@ -1,26 +1,38 @@
 <?php
-$filename = 'review.txt';
-date_default_timezone_set('Asia/Tokyo');
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $name = $_POST['my_name']."\n";
-  $comment = $_POST['comment']."\n";
-
-  if (!strlen($name) > 20) {
-    $err_msg[] = '名前は20文字以内で入力してください';
-  }
-  if ($name === "" || $comment === "") {
-      
-
-  $time = date("Y/m/d H:i:s") . "\n";
-  $write = '・' .$name. '：' .$comment. '-' .$time."<br/>";
-  $log = fopen ($filename, "a");
-  flock ($log, LOCK_EX);
-  fputs ($log, $write);
-  flock ($log, LOCK_UN);
-  fclose ($log);
+function h($s) {
+  return htmlspecialchars($s, ENT_QUOTES, "UTF-8");
 }
-$contents = file_get_contents($filename);
+date_default_timezone_set('Asia/Tokyo');
+$err_msg1 = "";
+$err_msg2 = "";
+$err_msg3 = "";
+$err_msg4 = "";
+$name = (isset($_POST["comment"]) === true) ?$_POST["name"]: "";
+$comment = (isset($_POST["comment"]) === true) ? trim($_POST["comment"]): "";
+
+if (  isset($_POST["submit"] ) ===  true ) {
+    if ( $name   === "" ) $err_msg1 = "名前を入力してください"; 
+ 
+    if ( $comment  === "" )  $err_msg2 = "ひとことを入力してください";
+ 
+    if( $err_msg1 === "" && $err_msg2 ==="" ){
+        $fp = fopen( "review.txt" ,"a" );
+        fwrite( $fp ,  $name."\t".$comment."\n");
+    }
+ 
+}
+
+$fp = fopen("review.txt","r");
+ 
+$dataArr = array();
+while($res = fgets($fp)){
+    $tmp = explode("\t",$res);
+    $arr = array(
+        "name"=>$tmp[0],
+        "comment"=>$tmp[1]
+    );
+    $dataArr[]= $arr;
+} 
 ?>
 
 <!DOCTYPE html>
@@ -31,11 +43,22 @@ $contents = file_get_contents($filename);
 </head>
 <body>
   <h1>ひとこと掲示板</h1>
+  <ul>
+  <li><?php echo $err_msg1; ?></li>
+  <li><?php echo $err_msg2; ?></li>
+  </ul>
   <form method="post">
-    名前：<input type="text" name="my_name">
-    ひとこと：<input type="text" name="comment">
-    <input type="submit" name="submit" value="送信"></label>
+    名前：<input type="text" name="name" value="<?php echo $name; ?>">
+    ひとこと：<input type="text" name="comment" value="<?php echo $comment; ?>">
+
+    <input type="submit" name="submit" value="送信">
   </form>
-  <p><?php print $contents; ?></p>
+  <ul>
+    <?php foreach ($dataArr as $data): ?>
+        <li>
+          <span><?php echo $data["name"]; ?></span>：<span><?php echo $data["comment"]; ?></span>
+        </li>
+    <?php endforeach; ?>
+　</ul>
 </body>
 </html>
