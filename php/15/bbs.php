@@ -1,50 +1,108 @@
 <?php
-    date_default_timezone_set('Asia/Tokyo');
-    $host     = 'localhost';
-    $username = 'codecamp22362';   // MySQLのユーザ名
-    $password = 'WIOCLRNA';       // MySQLのパスワード
-    $dbname   = 'codecamp22362';   // MySQLのDB名(今回、MySQLのユーザ名を入力してください)
-    $charset  = 'utf8';   // データベースの文字コード 
+date_default_timezone_set('Asia/Tokyo');
+$date = date('Y-m-d H:i:s');
+$name = 0;
+$comment = 0;
+$name_max = 20;
+$comment_max = 100;
 
-    $filename = './review.txt';
-    $name = 0;
-    $comment = 0;
-    $name_max = 20;
-    $comment_max = 100;
-    $log = date('Y-m-d H:i:s');
+$db_host = 'localhost';
+$db_name = 'codecamp22362';
+$db_user = 'codecamp22362';
+$db_pass = 'WIOCLRNA';
+$charset  = 'utf8';
 
-    // MySQL用のDSN文字列
-    $dsn = 'mysql:dbname='.$dbname.';host='.$host.';charset='.$charset;
- 
-    try {
-      // データベースに接続
-      $dbh = new PDO($dsn, $username, $password, array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4'));
-      $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
- 
-      // SQL文(データを格納)を作成
-      $sql = 'INSERT INTO post(user_name,user_comment,create_datetime)
-        VALUES('$name','$comment','$log');
-      // SQL文を実行する準備
-      $stmt = $dbh->prepare($sql);
-      // SQLを実行
-      $stmt->execute();
-      // レコードの取得
-      $rows = $stmt->fetchAll();
- 
-      var_dump($rows);
- 
-    } catch (PDOException $e) {
-      echo '接続できませんでした。理由：'.$e->getMessage();
+// データベースへ接続する
+$link = mysqli_connect( $db_host, $db_user, $db_pass, $db_name );
+if ( $link !== false ) {
+mysqli_set_charset($link, 'utf8');
+    $msg     = '';
+    $err_msg = '';
+
+    if ( isset( $_POST['send'] ) === true ) {
+
+        $name     = $_POST['name'];
+        $comment = $_POST['comment'];
+
+        if ( $name !== '' && $comment !== '' ) {
+
+            $query = " INSERT INTO post ( "
+                   . "    user_name , "
+                   . "    user_comment , "
+                   . "    create_datetime "
+                   . " ) VALUES ( "
+                   . "'" . mysqli_real_escape_string( $link, $name ) ."', "
+                   . "'" . mysqli_real_escape_string( $link, $comment ) . "',"
+                   . "'" . mysqli_real_escape_string( $link, $date) . "'"
+                   ." ) ";
+
+            $res   = mysqli_query( $link, $query );
+        }
     }
+
+    $query  = "SELECT id, user_name, user_comment, create_datetime FROM post";
+    $res    = mysqli_query( $link,$query );
+    $data = array();
+    while( $row = mysqli_fetch_assoc( $res ) ) {
+        array_push( $data, $row);
+    }
+    asort( $data );
+    
+} else {
+    echo "データベースの接続に失敗しました";
+}
+
+// データベースへの接続を閉じる
+mysqli_close( $link );
 ?>
 
-<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>ひとこと掲示版</title>
-  </head>
-  <body>
-  </body>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>ひとこと掲示板</title>
+    </head>
+    <body>
+      <h1>ひとこと掲示板</h1>
+       <?php if (mb_strlen($name) > $name_max) { ?>
+    <ul>
+      <li>
+  <?php print '名前は20文字以内で入力してください'; ?>
+      </li>
+    </ul>
+  <?php } ?>
+  <?php if (mb_strlen($name) === 0) { ?>
+    <ul>
+      <li>
+  <?php print '名前を入力してください'; ?>
+      </li>
+    </ul>
+  <?php } ?>
+  <?php if (mb_strlen($comment) > $comment_max) { ?>
+    <ul>
+      <li>
+  <?php print 'ひとことは100文字以内で入力してください'; ?>
+      </li>
+    </ul>
+  <?php } ?>
+  <?php if (mb_strlen($comment) === 0) { ?>
+    <ul>
+      <li>
+  <?php print 'ひとことを入力してください'; ?>
+      </li>
+    </ul>
+  <?php } ?>
+        <form method="post" action="">
+            名前：<input type="text" name="name" value="" />
+            ひとこと：<input type="text" name="comment" size="50" value="" />
+           <input type="submit" name="send" value="送信" />
+        </form>
+        <!-- ここに、書き込まれたデータを表示する -->
+  <?php foreach( $data as $key => $val ) { ?>
+    <ul>
+      <li>
+        <?php echo $val['user_name'] . ' ' . $val['user_comment'] .  ' ' . $val['create_datetime'] . '<br>';  ?>
+      </li>
+    </ul>
+  <?php } ?>
+    </body>
 </html>

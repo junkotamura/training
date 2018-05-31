@@ -82,9 +82,10 @@ $data = array();
     </ul>
   <?php } ?>
   <form method="post">
-    名前：<input type="text" name="name" value="">
+    <p> 名前：<input type="text" name="name" value="">
     ひとこと：<input type="text" name="comment" size= "50" value="">
     <input type="submit" name="submit" value="送信">
+    </p>
   </form>
   <?php foreach ($data as $read) { ?>
     <ul>
