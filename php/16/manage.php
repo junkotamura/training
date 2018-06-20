@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
     try {
-    // データベースに接続
+        // データベースに接続
         $dbh = new PDO($dsn, $username, $password, array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4'));
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -82,27 +82,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    
             if(isset($_POST['submit1'])) {
          
-                $name     = $_POST['drink_name'];
+                $name  = $_POST['drink_name'];
                 $price = $_POST['price'];
                 $stock = $_POST['stock'];
     
                 $dbh->beginTransaction();
                 try {
                     // SQL文を作成
-                    $sql = 'INSERT INTO test_drink_master(img_file_name, drink_name, price, create_datetime) VALUES(?, ?, ?, ?);';
+                    $sql = "INSERT INTO 
+                              test_drink_master(img_file_name, drink_name, price, create_datetime)
+                            VALUES
+                              (:img_file_name, :drink_name, :price, :create_datetime);";
                     // SQL文を実行する準備
                     $stmt = $dbh->prepare($sql);
                     // SQL文のプレースホルダに値をバインド
-                    $stmt->bindValue(1, $new_img_filename,    PDO::PARAM_STR);
-                    $stmt->bindValue(2, $name);
-                    $stmt->bindValue(3, $price,    PDO::PARAM_INT);
-                    $stmt->bindValue(4, $date,    PDO::PARAM_INT);
+                    $stmt->bindValue(':img_file_name', $new_img_filename, PDO::PARAM_STR);
+                    $stmt->bindValue(':drink_name', $name, PDO::PARAM_STR);
+                    $stmt->bindValue(':price', $price, PDO::PARAM_INT);
+                    $stmt->bindValue(':create_datetime', $date, PDO::PARAM_INT);
                     // SQLを実行
                     $stmt->execute();
+                    
                     // SQL文を作成
-                    $sql = 'INSERT INTO test_drink_stock(drink_id, stock, create_datetime, update_datetime) VALUES(?, "' .$stock. '" ,"' .$date. '" , "' .$date. '" );';
+                    $sql = "INSERT INTO
+                              test_drink_stock(stock, create_datetime, update_datetime)
+                            VALUES
+                              (:stock, :create_datetime, :update_datetime);";
                     // SQL文を実行する準備
                     $stmt = $dbh->prepare($sql);
+                    // SQL文のプレースホルダに値をバインド
+                    $stmt->bindValue(':stock', $stock, PDO::PARAM_INT);
+                    $stmt->bindValue(':create_datetime', $date, PDO::PARAM_INT);
+                    $stmt->bindValue(':update_datetime', $date, PDO::PARAM_INT);
                     // SQLを実行
                     $stmt->execute();
                     // コミット処理
@@ -133,22 +144,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             if (isset($_POST['submit2'])) {
                 
+                $stock = $_POST['stock'];
+                $up_date = $_POST['update_datetime'];
+                $id = $_POST['drink_id'];
+
+                $dbh->beginTransaction();
                 try {
-                    $stock = $_POST['stock'];
-                    $id = $_POST['drink_id'];
+                    // SQL文を作成
+                    $sql = "UPDATE
+                              test_drink_stock
+                            SET
+                              update_datetime = :update_datetime
+                            WHERE
+                              drink_id = :drink_id";
+                    // SQL文を実行する準備
+                    $stmt = $dbh->prepare($sql);
+                    // SQL文のプレースホルダに値をバインド
+                    $stmt->bindValue(':update_datetime', $up_date, PDO::PARAM_INT);
+                    $stmt->bindValue(':drink_id', $id, PDO::PARAM_INT);
+                    // SQLを実行
+                    $stmt->execute();
                     
-                    $sql =
-                    "UPDATE
-                        test_drink_stock
-                    SET
-                        stock = $stock
-                    WHERE
-                        drink_id = $id";
-                        
-                    $stmt = $dbh->query($sql);
+                    // SQL文を作成
+                    $sql = "UPDATE
+                              test_drink_stock
+                            SET
+                              stock = :stock
+                            WHERE
+                              drink_id = :drink_id";
+                     // SQL文を実行する準備
+                    $stmt = $dbh->prepare($sql);
+                    // SQL文のプレースホルダに値をバインド
+                    $stmt->bindValue(':stock', $stock, PDO::PARAM_INT);
+                    $stmt->bindValue(':drink_id', $id, PDO::PARAM_INT);
+                    // SQLを実行
+                    $stmt->execute();
+                     // コミット処理
+                    $dbh->commit();    
                 } catch (PDOException $e) {
+                    $dbh->rollback();
                     throw $e;
-                  }
+                  } 
             }
                 try {
                     // SQL文を実行する準備
@@ -220,6 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <td>
                   <form method="post">
                     <input type="text" name="stock" value="<?php echo htmlspecialchars($value['stock']); ?>">個
+                    <input type="hidden" name="update_datetime" value="<?php echo htmlspecialchars("$date"); ?>">
                     <input type="hidden" name="drink_id" value="<?php echo htmlspecialchars($value['drink_id']); ?>">
                     <input type="submit" name="submit2" value="変更">
                   </form>
